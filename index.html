@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+	<title>API Testing</title>
+	<meta charset="utf-8"/>
+	<style type="text/css">
+		body{
+			text-align: center;
+			background-color: #D3D3D3;
+		}
+		data{
+			font-size: 24px;
+		}
+	</style>
+	<script>
+		function getRates() {
+			request = new XMLHttpRequest();
+
+			request.open("GET", "https://api.exchangeratesapi.io/latest", true);
+
+			// Step 3: set up event handler/callback
+
+			request.onreadystatechange = function() {
+ 
+				if (request.readyState == 4 && request.status == 200) {
+
+					// Step 5: wait for done + success
+
+					result = request.responseText;
+					console.log(result);
+					rates = JSON.parse(result);
+					document.getElementById("data").innerHTML = "";
+					console.log(rates["rates"]["CAD"]);
+					document.getElementById("data").innerHTML += "All numbers are conversions from euros <br />";
+					document.getElementById("data").innerHTML += "Conversion Rate to Canadian Dollars: " +  rates["rates"]["CAD"] + "<br />";
+					document.getElementById("data").innerHTML += "Conversion Rate to Icelandic Krona: " +  rates["rates"]["ISK"] + "<br />";
+					document.getElementById("data").innerHTML += "Conversion Rate to Thai Baht: " +  rates["rates"]["THB"] + "<br />";
+
+
+				}
+				else if (request.readyState == 4 && request.status != 200) {
+					document.getElementById("data").innerHTML = "Something is wrong! Very sad " + request.status;
+				}
+
+				else if (request.readyState == 3) {
+					document.getElementById("data").innerHTML = "Search in progress, too impatient";
+				}
+			}
+			request.send();
+		}
+	</script>
+</head>
+
+
+<body onload="getRates()">
+	<h1>API tester</h1>
+	<div id="data" class="data">Loading...</div>
+	<h2>Info about API</h2>
+	<div>Data about the exchange rates from euros to some other foreign currencies.</div>
+	<a href="https://exchangeratesapi.io/">Link</a>
+	<div>I used the option to get the current exchange rate data</div>
+	<div> This API would be useful in a website that is international, and a stock exchange monitoring website</div>
+</body>
+</html>
